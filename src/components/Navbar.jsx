@@ -1,7 +1,27 @@
 // src/components/Navbar.jsx
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
+import { logout } from "../services/authService"; // Importamos la función logout
 
-const Navbar = () => {
+const Navbar = ({ sesion }) => {
+
+  const handleLogout = () => {
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "Tu sesión se cerrará.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Sí, cerrar sesión",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        logout(); // Llamamos a la función logout desde Login.jsx
+      }
+    });
+  };
+
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container">
@@ -26,6 +46,24 @@ const Navbar = () => {
                 Inicio
               </Link>
             </li>
+            {sesion ? (
+              <>
+                <li className="nav-item">
+                  <button
+                    className="nav-link btn btn-link"
+                    onClick={handleLogout}
+                  >
+                    Cerrar Sesión
+                  </button>
+                </li>
+              </>
+            ) : (
+              <li className="nav-item">
+                <Link className="nav-link" to="/login">
+                  Iniciar sesión
+                </Link>
+              </li>
+            )}
             <li className="nav-item">
               <Link className="nav-link" to="/about">
                 Sobre Nosotros

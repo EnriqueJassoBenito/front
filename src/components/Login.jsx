@@ -14,9 +14,9 @@ const Login = ({ onLoginSuccess }) => {
     e.preventDefault();
     try {
       await login(username, password);
-      // Regresar al home
-      
-      // onLoginSuccess();
+      //Regresar a home
+      navi("/");
+      //onLoginSuccess();
     } catch (err) {
       setError("Credenciales incorrectas");
     }

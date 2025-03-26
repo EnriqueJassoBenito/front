@@ -1,7 +1,14 @@
 import React from "react";
+import { motion } from "framer-motion";
 
 const AboutUs = () => {
   return (
+    <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0, transition: { duration: 0.5 } }}
+              exit={{ opacity: 0, y: -50, transition: { duration: 0.5 } }}
+              className="page"
+            >
     <div className="container mt-5">
       <div className="row align-items-center">
         <div className="col-md-6 text-center">
@@ -53,6 +60,7 @@ const AboutUs = () => {
         <p>¿Quieres saber más? Escríbenos a <strong>dericklagunes@utez.edu.mx</strong></p>
       </div>
     </div>
+    </motion.div>
   );
 };
 
