@@ -94,16 +94,6 @@ const CustomUserForm = () => {
                   name={field}
                   type={type || "text"}
                 />
-                {/* Mostrar las condiciones si el campo es password */}
-                {field === "password" && (
-                  <div>
-                    <p>Al menos un número.</p>
-                    <p>Al menos una letra mayúscula.</p>
-                    <p>Al menos un carácter especial
-                      (!#$%&?).</p>
-                      <p>Mínimo de 8 caracteres en total.</p>
-                      </div>
-                    )}
                 {errors[field] && (
                     <span autoFocus className="text-danger">
                         {errors[field].map((errorMsg, index) => (

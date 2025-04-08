@@ -1,10 +1,34 @@
 import React, { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import axios from "axios"; // Si deseas obtener datos desde una API
+import { createPortal } from "react-dom";
+import ModalEdit from "./ModalEdit";
+import axiosInstance from "../services/axiosInstante";
 
 const UserDataTable = () => {
   const [data, setData] = useState([]); // Datos para la tabla
   const [loading, setLoading] = useState(true); // Estado de carga
+  const [showModal, setShowModal] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+
+  const handleDelete = async (userId, userName) => {
+    if (
+      !window.confirm(
+        `¿Estás seguro de que deseas eliminar a ${userName}? Esta acción no se puede deshacer.`
+      )
+    )
+      return;
+
+    try {
+      await axiosInstance.delete(`users/api/${userId}/`);
+      alert("Usuario eliminado con éxito.");
+      // Puedes volver a cargar la tabla o actualizar el estado localmente
+      window.location.reload(); // O mejor: actualiza la data sin reload
+    } catch (error) {
+      console.error("Error al eliminar el usuario:", error);
+      alert("Error al eliminar. Asegúrate de estar autenticado.");
+    }
+  };
 
   // Configuración de columnas
   const columns = [
@@ -28,13 +52,26 @@ const UserDataTable = () => {
         <span>
           <button
             className="btn btn-warning me-4"
-            onClick={() => alert(`Editando ${row.name}`)}
+            onClick={() => {
+              setSelectedUser(row);
+              setShowModal(true);
+            }}
           >
             <i className="bi bi-pencil"></i>
           </button>
+
+          {showModal &&
+            selectedUser &&
+            createPortal(
+              <ModalEdit
+                user={selectedUser}
+                onClose={() => setShowModal(false)}
+              />,
+              document.body
+            )}
           <button
-            className="btn btn-danger me-4"
-            onClick={() => alert(`Editando ${row.name}`)}
+            className="btn btn-danger"
+            onClick={() => handleDelete(row.id, row.name)}
           >
             <i className="bi bi-trash"></i>
           </button>
